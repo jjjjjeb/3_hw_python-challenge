@@ -39,14 +39,18 @@ with open(csvpath, newline='') as csvfile:
         profit.append(row[1])
         total_profitloss = total_profitloss + int(row[1])
 
-        # calculate change #DOUBLE NEGATIVE calc ISSUE how to deal w it
+        # Calculate change 
+        # Not getting the value reflected in the answer example in the hw description
+        # Having a double negative calculation issue! Tried to fix it 
+        # - ...Still not correct!
+        # Here's how I tried to fix the problem:
+        # if int(row[1]) < 0:
+        #    changes = final_profitloss - (-previous)
+        # else:
+        #    changes = (final_profitloss - previous)
+
         final_profitloss = int(row[1])
         changes = final_profitloss - previous
-
-        #if int(row[1]) < 0:
-        #    changes = final_profitloss - (-previous)
-        #else:
-        #    changes = (final_profitloss - previous)
 
         monthly_change.append(changes)
         
