@@ -1,29 +1,24 @@
-#files using for code resource: web_solved, zipper, netflix
-#houseofpie, readcsv, writecsv
-
 import os
 import csv
-from statistics import mean
 
 #path to collect data
 csvpath = os.path.join("./Resources/budget_data.csv")
 
-# assign
+# assigning variables...
 total_profitloss = 0
 final_profitloss = 0
 total_change_profitloss = 0
 counter = 0
 previous = 0
 
-# lists
+# .. and lists
 profit = []
 monthly_change = []
 date = []
 
-#Read data w CSV module
+# read file data w csv module
 with open(csvpath, newline='') as csvfile:
     csvreader = csv.reader(csvfile, delimiter=",")
-    #print(csvreader)
     csv_header = next(csvreader)
     
     for row in csvreader:
@@ -34,42 +29,45 @@ with open(csvpath, newline='') as csvfile:
         # collect the dates into a list
         date.append(row[0])
 
-        # add all the profits in column 2 to the profit/loss list
-        # make a calculation to add the totals to a 'total profits' variable
+        # Add all the profits in column 2 to the profit/loss list
         profit.append(row[1])
+        
+        # Make a calculation to add the totals to a 'total profits' variable
         total_profitloss = total_profitloss + int(row[1])
 
-        # Calculate change 
-        # Not getting the value reflected in the answer example in the hw description
-        # Having a double negative calculation issue! Tried to fix it 
-        # - ...Still not correct!
+        # Calculate changes and get average...
+ 
+        # !!! Not getting the value reflected in the answer example in the hw description
+        # Having a double negative calculation issue! Tried to fix it...
+        # ...Still not correct!
+
         # Here's how I tried to fix the problem:
+    
         # if int(row[1]) < 0:
         #    changes = final_profitloss - (-previous)
         # else:
-        #    changes = (final_profitloss - previous)
+        #    changes = (final_profitloss - previous) 
 
+        # Calculate changes...
         final_profitloss = int(row[1])
         changes = final_profitloss - previous
-
         monthly_change.append(changes)
-        
         total_change_profitloss += changes
         previous  = final_profitloss
 
-        # calc ave
+        # Get average
         ave_change_profitloss = (total_change_profitloss/counter)
-
-        #calc year
+ 
+        # calculate year
         years = (counter/12)
 
-        # get max & min
+        # Get max increase and decrease
         max_in = max(monthly_change)
         max_de = min(monthly_change)
-
         max_in_PL = date[monthly_change.index(max_in)]
         max_de_PL = date[monthly_change.index(max_de)]
 
+# Print in terminal and to a txt file
 
 print(" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 print(" FINANCIAL ANALYSIS")
@@ -81,11 +79,6 @@ print(" Average Change: " + "$" + str(int(ave_change_profitloss)))
 print(" Greatest Increase in Profits: $" + str(max_in) + " " + str(max_in_PL))
 print(" Greatest Decrease in Profits: $" + str(max_de) + " " + str(max_de_PL))
 print(" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-
-#print(profit)
-#print(monthly_change)
-#print(total_change_profitloss)
-#print(int(counter))
 
 with open('Pybank.txt', "w") as text_file:
     print(f" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", file=text_file)

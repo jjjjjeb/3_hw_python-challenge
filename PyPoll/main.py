@@ -2,26 +2,22 @@
 import os
 import csv
 
-# path to collect data
+# Path to collect data
 csvpath = os.path.join("./Resources/election_data.csv")
 
-# columns = "Voter ID, County, Candidate"
-
+# Columns = "Voter ID, County, Candidate"
 
 election_poll = {}
-
 voter_ids = []
 voter_county = []
 total_votes_number = []
 votes_percentage = []
-
 total_votes_counter = 0
 candidates_list = []
-
 total_votes = 0
 winner = []
 
-#read csv
+# Read csv
 with open(csvpath, newline= '') as csvfile:
     csvreader = csv.reader(csvfile, delimiter=',')
 
@@ -38,23 +34,23 @@ with open(csvpath, newline= '') as csvfile:
         else:
             election_poll[row[2]] = 1
 
-# fill in the dictionary with keys and values
+# Fill in the dictionary with keys and values
 for key, value in election_poll.items():
     candidates_list.append(key)
     total_votes_number.append(value)
 
-# now find the precentage
-
+# Now find the precentage
 for v in total_votes_number:
     votes_percentage.append(round(v/total_votes_counter*100, 1))
 
-# group the lists into related tuples using zip function!
+# Group the lists into related tuples using zip function
 poll_data = list(zip(candidates_list, total_votes_number, votes_percentage))
 
 for candidate in poll_data:
     if max(total_votes_number) == candidate[1]:
         winner.append(candidate[0])
 
+# Print in terminal and to a txt file
 print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 print("ELECTION RESULTS")
 print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
