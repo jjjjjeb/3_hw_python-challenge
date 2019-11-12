@@ -68,7 +68,6 @@ with open(csvpath, newline='') as csvfile:
         max_de_PL = date[monthly_change.index(max_de)]
 
 # Print in terminal and to a txt file
-
 print(" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 print(" FINANCIAL ANALYSIS")
 print(" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
