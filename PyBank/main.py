@@ -5,16 +5,15 @@ import csv
 csvpath = os.path.join("./Resources/budget_data.csv")
 
 # assigning variables...
-total_profitloss = 0
-final_profitloss = 0
-total_change_profitloss = 0
+netProfit = 0
+monthProfit = 0
 counter = 0
 previous = 0
+change = 0
 
 # .. and lists
-profit = []
-monthly_change = []
-date = []
+changesList = []
+months = []
 
 # read file data w csv module
 with open(csvpath, newline='') as csvfile:
@@ -27,56 +26,60 @@ with open(csvpath, newline='') as csvfile:
         counter = counter + 1
 
         # collect the dates into a list
-        date.append(row[0])
+        months.append(str(row[0]))
 
         # Add all the profits in column 2 to the profit/loss list
-        profit.append(row[1])
+        netProfit += int(row[1])
         
-        # Make a calculation to add the totals to a 'total profits' variable
-        total_profitloss = total_profitloss + int(row[1])
+        # Calulate changes in month to month profit
+        # if there is previous data then...
+        if change != 0:
 
-        # Calculate changes and get average...
- 
-        # !!! Not getting the value reflected in the answer example in the hw description
-        # Having a double negative calculation issue! Tried to fix it...
-        # ...Still not correct!
+            # set value of monthProfit to 2nd column in row
+            monthProfit = int(row[1])
 
-        # Here's how I tried to fix the problem:
+            # Subtract current profit from previous month
+            change = monthProfit - change
+
+            # take the change value and store it in a list
+            changesList.append(change)
+
+            # reset the change variable
+            change = int(row[1])
+        
+        # if there is no previous data set the variable to the value in the first row, column 2
+        elif change == 0:
+            change = int(row[1])
     
-        # if int(row[1]) < 0:
-        #    changes = final_profitloss - (-previous)
-        # else:
-        #    changes = (final_profitloss - previous) 
+    # remove first month from list since there is no change there
+    months.pop(0)
 
-        # Calculate changes...
-        final_profitloss = int(row[1])
-        changes = final_profitloss - previous
-        monthly_change.append(changes)
-        total_change_profitloss += changes
-        previous  = final_profitloss
+    # find the greatest increase and decrease in profits in the change list
+    max_in = max(changesList)
+    max_de = min(changesList)
 
-        # Get average
-        ave_change_profitloss = (total_change_profitloss/counter)
+    # use index positions to find the months for those numbers
+    maxIncDate = months[changesList.index(max_in)]
+    maxDecDate = months[changesList.index(max_de)]
+
+    # get the average of the changeList
+    ave = sum(changesList)/float(len(changesList))
+    ave = round(ave, 2)
  
-        # calculate year
-        years = (counter/12)
-
-        # Get max increase and decrease
-        max_in = max(monthly_change)
-        max_de = min(monthly_change)
-        max_in_PL = date[monthly_change.index(max_in)]
-        max_de_PL = date[monthly_change.index(max_de)]
+    # calculate year
+    years = float(counter/12)
+    years = round(years, 2)
 
 # Print in terminal and to a txt file
 print(" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 print(" FINANCIAL ANALYSIS")
 print(" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 print(" Total Months: " + str(counter))
-print(" Total Years: " + str(int(years))+ "ish")
-print(" Total Profits: " + "$" + str(total_profitloss))
-print(" Average Change: " + "$" + str(int(ave_change_profitloss)))
-print(" Greatest Increase in Profits: $" + str(max_in) + " " + str(max_in_PL))
-print(" Greatest Decrease in Profits: $" + str(max_de) + " " + str(max_de_PL))
+print(" Total Years: " + str(float(years)))
+print(" Total Profits: " + "$" + str(netProfit))
+print(" Average Change: " + "$" + str(float(ave)))
+print(" Greatest Increase in Profits: $" + str(max_in) + " " + str(maxIncDate))
+print(" Greatest Decrease in Profits: $" + str(max_de) + " " + str(maxDecDate))
 print(" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 
 with open('Pybank.txt', "w") as text_file:
@@ -85,8 +88,8 @@ with open('Pybank.txt', "w") as text_file:
     print(f" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", file=text_file)
     print(f" Total Months: " + str(counter), file=text_file)
     print(f" Total Years: " + str(int(years))+ "ish", file=text_file)
-    print(f" Total Profits: " + "$" + str(total_profitloss), file=text_file)
-    print(f" Average Change: " + "$" + str(int(ave_change_profitloss)), file=text_file)
-    print(f" Greatest Increase in Profits: $" + str(max_in) + " " + str(max_in_PL), file=text_file)
-    print(f" Greatest Decrease in Profits: $" + str(max_de) + " " + str(max_de_PL), file=text_file)
+    print(f" Total Profits: " + "$" + str(netProfit), file=text_file)
+    print(f" Average Change: " + "$" + str(float(ave)), file=text_file)
+    print(f" Greatest Increase in Profits: $" + str(max_in) + " " + str(maxIncDate), file=text_file)
+    print(f" Greatest Decrease in Profits: $" + str(max_de) + " " + str(maxDecDate), file=text_file)
     print(f" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", file=text_file)
